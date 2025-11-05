@@ -23,7 +23,7 @@ public class LandController : MonoBehaviour
 
     public void Planted()
     {
-        EventManager.Instance.TriggerEvent(new LandPlantedAddEvent(1, LandID));
+        EventManager.Instance.TriggerEvent(new LandPlantedAddEvent(LandID));
     }
 
     public void PlantedSuccess()

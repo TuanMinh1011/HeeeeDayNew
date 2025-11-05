@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -11,11 +12,24 @@ public class UIManager : MonoBehaviour
     private int _landSpaceAmount;
     private int _landPlantedAmount;
 
-    private void Start()
+    private void OnEnable()
     {
         EventManager.Instance.AddListener<CoinsChangedEvent>(CoinsTextChanged);
-        EventManager.Instance.AddListener<LandSpaceAddEvent>(LandSpaceChanged);
-        EventManager.Instance.AddListener<LandPlantedAddEvent>(LandPlantedChanged);
+        EventManager.Instance.AddListener<LandSpaceSucceeded>(LandSpaceChanged);
+        EventManager.Instance.AddListener<LandPlantedSucceeded>(LandPlantedChanged);
+
+        EventManager.Instance.AddListener<LoadDataEvent>(LoadData);
+    }
+
+    private void LoadData(LoadDataEvent info)
+    {
+        _cointAmount = info.User.Coins;
+        _landSpaceAmount = info.User.Lands.Count(x => !x.IsPlanted);
+        _landPlantedAmount = info.User.Lands.Count(x => x.IsPlanted);
+
+        _coinsText.text = _cointAmount.ToString();
+        _landSpaceText.text = _landSpaceAmount.ToString();
+        _landPlantedText.text = _landPlantedAmount.ToString();
     }
 
     private void CoinsTextChanged(CoinsChangedEvent info)
@@ -25,17 +39,17 @@ public class UIManager : MonoBehaviour
         _coinsText.text = _cointAmount.ToString();
     }
 
-    private void LandSpaceChanged(LandSpaceAddEvent info)
+    private void LandSpaceChanged(LandSpaceSucceeded info)
     {
-        _landSpaceAmount += info.Amount;
+        _landSpaceAmount = info.Amount;
 
         _landSpaceText.text = _landSpaceAmount.ToString();
     }
 
-    private void LandPlantedChanged(LandPlantedAddEvent info)
+    private void LandPlantedChanged(LandPlantedSucceeded info)
     {
-        _landPlantedAmount += info.Amount;
-        _landSpaceAmount -= info.Amount;
+        _landPlantedAmount = info.AmountPlanted;
+        _landSpaceAmount = info.AmountSpace;
 
         _landPlantedText.text = _landPlantedAmount.ToString();
         _landSpaceText.text = _landSpaceAmount.ToString();

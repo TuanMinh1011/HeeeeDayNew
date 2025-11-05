@@ -13,20 +13,33 @@ public class CoinsChangedEvent: GameEvent
 
 public class LandSpaceAddEvent: GameEvent
 {
+    public int LandID;
     public int Amount;
-    public LandSpaceAddEvent(int amount)
+    public Vector2 Position;
+
+    public LandSpaceAddEvent(int landId, int amount, Vector2 position)
     {
+        LandID = landId;
         Amount = amount;
+        Position = position;
     }
 }
 
 public class LandPlantedAddEvent: GameEvent
 {
-    public int Amount;
     public int LandID;
-    public LandPlantedAddEvent(int amount, int landID)
+
+    public LandPlantedAddEvent(int landID)
     {
-        Amount = amount;
         LandID = landID;
     }
 }
+
+//public class LoadDataEvent : GameEvent
+//{
+//    public User User;
+//    public LoadDataEvent(User user) 
+//    {
+//        User = user;
+//    }
+//}
