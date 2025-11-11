@@ -28,6 +28,7 @@ public class Land
 
 public class Plant
 {
+    public int IdPlant
     public PlantType PlantType;
     public string PlantName;
     public int GrowthTime; // in seconds
